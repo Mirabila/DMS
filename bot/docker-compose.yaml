@@ -1,0 +1,22 @@
+services:
+    db:
+        container_name: postgres_container
+        image: postgres
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: postgres
+        ports:
+            - "5432:5432"
+        restart: unless-stopped
+
+    bot:
+        container_name: bot_container
+        build:
+          context: ./
+          dockerfile: Dockerfile
+        depends_on:
+          - db
+        environment:
+            DATABASE_URL: "postgresql://postgres:admin@postgres:5432/postgres"
+
